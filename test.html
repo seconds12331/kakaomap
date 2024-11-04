@@ -4,49 +4,127 @@
     <meta charset="utf-8">
     <title>키워드로 장소검색하고 목록으로 표출하기</title>
     <style>
-.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+/* .map_wrap와 그 하위 요소에 공통 스타일 적용 */
+.map_wrap, .map_wrap * {
+    margin: 0;
+    padding: 0;
+    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+    font-size: 12px;
+}
 
+/* 지도를 표시할 컨테이너 스타일 */
 .map_wrap {
     position: relative;
     width: 100%;
     height: 360px;
 }
+
+/* 검색 메뉴의 스타일 */
 #menu_wrap {
-    display: block; /* 기본적으로 숨김 */
+    display: block; /* 기본적으로 표시됨 */
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
-    width: 250px;
+    width: 250px; /* 메뉴 너비 */
     margin: 10px 0 30px 10px;
     padding: 5px;
-    overflow-y: auto;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 1;
+    overflow-y: auto; /* 세로 스크롤 추가 */
+    background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
+    z-index: 1; /* 지도 위에 표시되도록 설정 */
     font-size: 12px;
-    border-radius: 10px;
+    border-radius: 10px; /* 모서리 둥글게 설정 */
 }
-.bg_white {background:#fff;}
 
-#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
-#menu_wrap .option{text-align: center;}
-#menu_wrap .option p {margin:10px 0;}  
-#menu_wrap .option button {margin-left:5px;}
-#placesList li {list-style: none;}
-#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
-#placesList .item span {display: block;margin-top:4px;}
-#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-#placesList .item .info{padding:10px 0 10px 55px;}
-#placesList .info .gray {color:#8a8a8a;}
-#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
-#placesList .info .tel {color:#009900;}
-#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
-#placesList .item .marker_1 {background-position: 0 -10px;}
-#placesList .item .marker_2 {background-position: 0 -56px;}
-#placesList .item .marker_3 {background-position: 0 -102px}
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
+/* 메뉴 배경을 흰색으로 설정하는 클래스 */
+.bg_white {
+    background: #fff;
+}
+
+/* 메뉴 내의 수평선 스타일 */
+#menu_wrap hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 2px solid #5F5F5F; /* 회색 선 */
+    margin: 3px 0;
+}
+
+/* 옵션 영역 가운데 정렬 */
+#menu_wrap .option {
+    text-align: center;
+}
+
+/* 옵션 영역의 문단 간격 */
+#menu_wrap .option p {
+    margin: 10px 0;
+}
+
+/* 옵션 영역 버튼의 왼쪽 여백 */
+#menu_wrap .option button {
+    margin-left: 5px;
+}
+
+/* 장소 목록 항목의 기본 스타일 */
+#placesList li {
+    list-style: none; /* 리스트 스타일 제거 */
+}
+
+/* 장소 목록 항목 스타일 */
+#placesList .item {
+    position: relative;
+    border-bottom: 1px solid #888; /* 항목 간 구분선 */
+    overflow: hidden;
+    min-height: 65px; /* 최소 높이 */
+}
+
+/* 장소 목록 항목 내부 텍스트 스타일 */
+#placesList .item span {
+    display: block;
+    margin-top: 4px;
+}
+
+/* 항목 제목(h5)과 정보(info)의 텍스트 넘침 처리 */
+#placesList .item h5, #placesList .item .info {
+    text-overflow: ellipsis; /* 넘칠 경우 말줄임표 */
+    overflow: hidden; /* 넘침 숨김 */
+    white-space: nowrap; /* 한 줄로 표시 */
+}
+
+/* 장소 정보(info)의 패딩 설정 */
+#placesList .item .info {
+    padding: 10px 0 10px 55px; /* 좌측 여백 추가 */
+}
+
+/* 정보 영역에서 부가 주소 회색 */
+#placesList .info .gray {
+    color: #8a8a8a;
+}
+
+/* 지번 주소 스타일 */
+#placesList .info .jibun {
+    padding-left: 26px; /* 좌측 여백 */
+    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+}
+
+/* 장소 목록 마커 배경 스타일 */
+#placesList .item .markerbg {
+    float: left;
+    position: absolute;
+    width: 36px;
+    height: 37px;
+    margin: 10px 0 0 10px;
+    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+}
+
+/* 각각의 마커 위치 설정 */
+#placesList .item .marker_1 {
+    background-position: 0 -10px;  }
+#placesList .item .marker_2 {
+    background-position: 0 -56px;  }
+#placesList .item .marker_3 {
+    background-position: 0 -102px;  }
+
 
 /* 검색 결과 목록과 페이지네이션 기본적으로 숨김 */
 #placesList, #pagination {
@@ -70,7 +148,6 @@
         </div>
         <hr>
         <ul id="placesList"></ul>
-        <div id="pagination"></div>
     </div>
 </div>
 
@@ -113,15 +190,12 @@ function searchPlaces() {
 }
 
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
-function placesSearchCB(data, status, pagination) {
+function placesSearchCB(data, status) {
     if (status === kakao.maps.services.Status.OK) {
 
         // 정상적으로 검색이 완료됐으면
         // 검색 목록과 마커를 표출합니다
         displayPlaces(data);
-
-        // 페이지 번호를 표출합니다
-        displayPagination(pagination);
 
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
@@ -202,9 +276,6 @@ function getListItem(index, places) {
     } else {
         itemStr += '    <span>' +  places.address_name  + '</span>'; 
     }
-                 
-      itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-                '</div>';           
 
     el.innerHTML = itemStr;
     el.className = 'item';
