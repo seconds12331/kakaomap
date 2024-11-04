@@ -125,11 +125,6 @@
 #placesList .item .marker_3 {
     background-position: 0 -102px;  }
 
-
-/* 검색 결과 목록과 페이지네이션 기본적으로 숨김 */
-#placesList, #pagination {
-    display: none;
-}
 </style>
 </head>
 
@@ -190,14 +185,12 @@ function searchPlaces() {
 }
 
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
-function placesSearchCB(data, status, pagination) {
+function placesSearchCB(data, status) {
     if (status === kakao.maps.services.Status.OK) {
 
         // 정상적으로 검색이 완료됐으면
         // 검색 목록과 마커를 표출합니다
         displayPlaces(data);
-
-        displayPagination(pagination);
 
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
