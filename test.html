@@ -188,13 +188,17 @@ function moveToCurrentLocation() {
                 lng = position.coords.longitude; // 경도
 
             var currentLatLng = new kakao.maps.LatLng(lat, lng);
-            mapOption = {
-                center: new kakao.maps.LatLng(lat, lng), // 현 위치로 초기화
-                level: 3 // 지도의 확대 레벨
-            };
-
-            // 현 위치로 지도를 새로 생성
-            map = new kakao.maps.Map(mapContainer, mapOption);
+            
+            // 지도 객체가 없으면 새로 생성, 이미 있으면 위치만 이동
+            if (!map) {
+                mapOption = {
+                    center: currentLatLng,  // 현 위치로 지도 중심 설정
+                    level: 3  // 지도 확대 수준
+                };
+                map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+            } else {
+                map.setCenter(currentLatLng); // 기존 지도 위치 이동
+            }
 
             // 현재 위치에 마커 추가
             var marker = new kakao.maps.Marker({
