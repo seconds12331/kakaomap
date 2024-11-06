@@ -172,13 +172,11 @@
 
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption;
-
-// 지도를 생성합니다    
-var map;
+    mapOption, map;
 
 // 카카오 지도 API 로드 후 실행될 함수
 kakao.maps.load(function () {
+    // 페이지 로드 시 바로 현 위치로 지도 초기화
     moveToCurrentLocation();
 });
 
@@ -189,6 +187,7 @@ function moveToCurrentLocation() {
             var lat = position.coords.latitude, // 위도
                 lng = position.coords.longitude; // 경도
 
+            var currentLatLng = new kakao.maps.LatLng(lat, lng);
             mapOption = {
                 center: new kakao.maps.LatLng(lat, lng), // 현 위치로 초기화
                 level: 3 // 지도의 확대 레벨
@@ -199,7 +198,7 @@ function moveToCurrentLocation() {
 
             // 현재 위치에 마커 추가
             var marker = new kakao.maps.Marker({
-                position: new kakao.maps.LatLng(lat, lng)
+                position: currentLatLng
             });
             marker.setMap(map);
 
