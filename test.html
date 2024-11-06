@@ -177,10 +177,10 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 // 지도를 생성합니다    
 var map;
 
-// 페이지 로드 시 현 위치로 지도 초기화
-window.onload = function() {
+// 카카오 지도 API 로드 후 실행될 함수
+kakao.maps.load(function () {
     moveToCurrentLocation();
-};
+});
 
 // 새로 고침 시 현 위치로 이동하는 함수
 function moveToCurrentLocation() {
