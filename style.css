@@ -18,12 +18,12 @@ html, body {
 }
 
 .daumIndex {
-            position: absolute; /* 지도 위에 검색창이 위치하도록 */
-            top: 10px; /* 상단에서의 위치 */
-            left: 20px; /* 좌측에서의 위치 */
-            z-index: 10; /* 지도보다 위에 표시 */
-            padding: 0; /* 패딩 제거 */
-            border-radius: 5px; /* 모서리 둥글게 */
+    position: absolute; /* 지도 위에 검색창이 위치하도록 */
+    top: 10px; /* 상단에서의 위치 */
+    left: 20px; /* 좌측에서의 위치 */
+    z-index: 10; /* 지도보다 위에 표시 */
+    padding: 0; /* 패딩 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
         }
         .header-container {
             align-items: center; /* 세로 정렬 */
@@ -88,7 +88,7 @@ html, body {
     display: none; /* 기본적으로 표시됨 */
     position: absolute;
     top: 50px;
-    left: 40px;
+    left: 60px;
     bottom: 0;
     width: 270px; /* 메뉴 너비 */
     height: 250px;
@@ -300,7 +300,7 @@ html, body {
         /* 커스텀 확대/축소 버튼 */
         .zoom-btn {
             position: absolute;
-            top : 120px;
+            top : 140px;
             right: 20px;
             display: flex;
             flex-direction: column;
