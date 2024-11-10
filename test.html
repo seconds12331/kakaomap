@@ -3,167 +3,75 @@
 <head>
     <meta charset="utf-8">
     <title>재난지도 test</title>
-    <style>
-/* .map_wrap와 그 하위 요소에 공통 스타일 적용 */
-.map_wrap, .map_wrap * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
-    font-size: 12px;
-}
-
-/* 지도를 표시할 컨테이너 스타일 */
-.map_wrap {
-    position: relative;
-    width: 100%;
-    height: 500px;
-}
-
-/* 검색 메뉴의 스타일 */
-#menu_wrap {
-    display: none; /* 기본적으로 표시됨 */
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 250px; /* 메뉴 너비 */
-    height: 250px;
-    margin: 10px 0 30px 10px;
-    padding: 5px;
-    overflow-y: auto; /* 세로 스크롤 추가 */
-    background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
-    z-index: 1; /* 지도 위에 표시되도록 설정 */
-    font-size: 12px;
-    border-radius: 10px; /* 모서리 둥글게 설정 */
-}
-
-/* 메뉴 배경을 흰색으로 설정하는 클래스 */
-.bg_white {
-    background: #fff;
-}
-
-/* 메뉴 내의 수평선 스타일 */
-#menu_wrap hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 2px solid #5F5F5F; /* 회색 선 */
-    margin: 3px 0;
-}
-
-/* 옵션 영역 가운데 정렬 */
-#menu_wrap .option {
-    text-align: center;
-}
-
-/* 옵션 영역의 문단 간격 */
-#menu_wrap .option p {
-    margin: 10px 0;
-}
-
-/* 옵션 영역 버튼의 왼쪽 여백 */
-#menu_wrap .option button {
-    margin-left: 5px;
-}
-
-/* 장소 목록 항목의 기본 스타일 */
-#placesList li {
-    list-style: none; /* 리스트 스타일 제거 */
-}
-
-/* 장소 목록 항목 스타일 */
-#placesList .item {
-    position: relative;
-    border-bottom: 1px solid #888; /* 항목 간 구분선 */
-    overflow: hidden;
-    min-height: 65px; /* 최소 높이 */
-}
-
-/* 장소 목록 항목 내부 텍스트 스타일 */
-#placesList .item span {
-    display: block;
-    margin-top: 4px;
-}
-
-/* 항목 제목(h5)과 정보(info)의 텍스트 넘침 처리 */
-#placesList .item h5, #placesList .item .info {
-    text-overflow: ellipsis; /* 넘칠 경우 말줄임표 */
-    overflow: hidden; /* 넘침 숨김 */
-    white-space: nowrap; /* 한 줄로 표시 */
-}
-
-/* 장소 정보(info)의 패딩 설정 */
-#placesList .item .info {
-    padding: 10px 0 10px 55px; /* 좌측 여백 추가 */
-}
-
-/* 정보 영역에서 부가 주소 회색 */
-#placesList .info .gray {
-    color: #8a8a8a;
-}
-
-/* 지번 주소 스타일 */
-#placesList .info .jibun {
-    padding-left: 26px; /* 좌측 여백 */
-    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
-}
-
-/* 장소 목록 마커 배경 스타일 */
-#placesList .item .markerbg {
-    float: left;
-    position: absolute;
-    width: 36px;
-    height: 37px;
-    margin: 10px 0 0 10px;
-    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
-}
-
-/* 각각의 마커 위치 설정 */
-#placesList .item .marker_1 {
-    background-position: 0 -10px;  }
-#placesList .item .marker_2 {
-    background-position: 0 -56px;  }
-#placesList .item .marker_3 {
-    background-position: 0 -102px;  }
     
-#header-container2 {
-    position: absolute;
-    top: 0; /* 버튼 아래쪽에 위치 */
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    height : 25px;
-    display: block; /* 제목과 검색창을 나란히 배치 */
-    align-items: center; /* 세로 정렬 */
-    background-color: #ffffff; /* 흰색 배경 */
-    border: 1px solid #e2e2e2; /* 테두리 색상 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    box-shadow: 0 2px 0px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
-}
-
-</style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 <div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+    <div id="map" style="width:100%;height:100vh;position:relative;overflow:hidden;"></div>
 
-    <div id="header-container2">
-        <div class="option">
-            <div>
-                <form onsubmit="searchPlaces(); return false;">
-                    <input type="text" placeholder="주소 검색" id="keyword" size="15"> 
-                    <button id="showMenuBtn" type="submit">검색하기</button>
-                    
-                    <div id="menu_wrap" >
-                        <button id="closeMenuBtn" style="position: absolute; top: 5px; right: 5px; background: transparent; border: none; font-size: 12px; cursor: pointer;">X</button> <!--검색 결과 닫기 버튼-->
-                        <div class="option">
-                            <ul id="placesList"></ul>
-                        </div>
-                    </div>
-                </form>
+  <div class="daumIndex">
+    <fieldset class="fld_inside"> <!-- 제목 및 검색창 배경 박스 -->
+        <div class="header-container">
+            <div class="title-container">
+                <h2 class="Title">
+                    <a id="local" class="local" href="?nil_profile=title&nil_scr=local">재난지도</a>
+                </h2>
             </div>
         </div>
+
+        <div id="header-container2">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); toggleMenu_wrap(); return false;" style="display: flex; align-items: center;">
+                        <input type="text" placeholder="주소 검색" id="keyword" size="15">
+                        <div style="border-left: 1px solid #e2e2e2; height: 30px; margin: 0; display: inline-block;"></div> <!-- 세로선 추가 --> 
+                        <button id="showMenuBtn" type="button">
+                            <img src="images/dodbogi.png" alt="검색" style="max-width: 20px; max-height: 20px;">
+                        </button>
+                    
+                        <div id="menu_wrap" >
+                            <button id="closeMenuBtn"  type="button" style="position: absolute; top: 5px; right: 5px; background: transparent; border: none; font-size: 12px; cursor: pointer;">X</button> <!--검색 결과 닫기 버튼-->
+                            <div class="option">
+                                <ul id="placesList"></ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="icons-container">
+            <div class="box_Icons">
+                <button id="showIconsBtn">재난</button>
+                <div id="iconContainer" class="hidden">
+                    <i class="icon"><img src="images/earth.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">지진</i>
+                    <i class="icon"><img src="images/heat.png" style="max-width: 35px; max-height: 40px; vertical-align: middle">폭염</i>
+                    <i class="icon"><img src="images/rain.png" style="max-width: 35px; max-height: 40px; vertical-align: middle">폭우</i>
+                    <i class="icon"><img src="images/typh.png" style="max-width: 35px; max-height: 40px; vertical-align: middle">태풍</i>
+                    <i class="icon"><img src="images/fire.png" style="max-width: 35px; max-height: 40px; vertical-align: middle">화재</i>
+                    <i class="icon"><img src="images/missing.png" style="max-width: 35px; max-height: 40px; vertical-align: middle">실종</i>
+                    <i class="special-icon"><img src="images/emg.png" style="max-width: 35px; max-height: 40px; vertical-align: middle">긴급재난</i>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+  </div>
+
+    <div class="header-container3">  <!-- 로그인 페이지 이동 -->
+        <a href="login.html" class="link">로그인</a>
+    </div>
+
+    <div class="header-container4">  <!-- 게시판 페이지 이동 -->
+        <a href="forum.html" class="link">게시판</a>
+    </div>
+
+    <!-- 커스텀 확대/축소 버튼 -->
+    <div class="zoom-btn">
+        <button id="currentLocationBtn" style="padding : 5px 5px"><img src="images/bhere.png"></button>
+        <button id="zoomInBtn">+</button>
+        <button id="zoomOutBtn" style="font-size: 22px;">-</button>
     </div>
 </div>
 
@@ -216,6 +124,15 @@ function moveToCurrentLocation() {
 
         }, function(error) {
             alert("위치를 가져올 수 없습니다.");
+
+            var mapContainer = document.getElementById('map'),
+            mapOption = {
+            center: new kakao.maps.LatLng(37.55170, 126.98226),
+            level: 5,
+            mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도 타입 설정
+            
+        }
+        map = new kakao.maps.Map(mapContainer, mapOption);
         });
     } else {
         alert("이 브라우저는 위치 정보를 지원하지 않습니다.");
@@ -227,6 +144,7 @@ var menu_wrap = document.getElementById('menu_wrap');
 
 // 버튼을 클릭하거나 엔터 키를 눌렀을 때 검색 결과를 표시하거나 숨기기
 showMenuBtn.addEventListener('click', function() {
+    searchPlaces();
     toggleMenu_wrap();
 });
 
@@ -237,6 +155,15 @@ showMenuBtn.addEventListener('keydown', function(event) {
     }
 });
 
+document.getElementById('keyword').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // 기본 엔터키 동작 방지
+        searchPlaces(); // 검색 함수 실행
+        toggleMenu_wrap(); // 메뉴 표시 전환
+    }
+});
+
+
 //검색 결과를 표시하거나 숨기는 함수
 function toggleMenu_wrap() {
     // 현재 display 상태에 따라 표시/숨기기
@@ -246,6 +173,7 @@ function toggleMenu_wrap() {
         menu_wrap.style.display = 'none';
     }
 }
+
 
 // X 버튼 클릭 시 메뉴 숨기기 기능 추가
 document.getElementById('closeMenuBtn').addEventListener('click', function() {
@@ -260,7 +188,6 @@ var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
-
     var keyword = document.getElementById('keyword').value;
 
     if (!keyword.replace(/^\s+|\s+$/g, '')) {
@@ -299,9 +226,9 @@ function placesSearchCB(data, status) {
 // 검색 결과 목록과 마커를 표출하는 함수입니다
 function displayPlaces(places) {
     var listEl = document.getElementById('placesList'), 
-    menuEl = document.getElementById('menu_wrap'),
-    fragment = document.createDocumentFragment(), 
-    bounds = new kakao.maps.LatLngBounds();
+        menuEl = document.getElementById('menu_wrap'),
+        fragment = document.createDocumentFragment(), 
+        bounds = new kakao.maps.LatLngBounds();
 
     // 검색 결과 목록에 추가된 항목들을 제거합니다
     removeAllChildNods(listEl);
@@ -427,6 +354,88 @@ function removeAllChildNods(el) {
         el.removeChild (el.lastChild);
     }
 }
+
+        // 확대/축소 버튼 기능
+        var zoomInBtn = document.getElementById('zoomInBtn');
+        var zoomOutBtn = document.getElementById('zoomOutBtn');
+
+        // 확대 버튼 클릭 시 레벨을 1 감소시켜서 확대
+        zoomInBtn.addEventListener('click', function() {
+            map.setLevel(map.getLevel() - 1);
+        });
+
+        // 축소 버튼 클릭 시 레벨을 1 증가시켜서 축소
+        zoomOutBtn.addEventListener('click', function() {
+            map.setLevel(map.getLevel() + 1);
+        });
+
+        // 현위치 버튼 클릭 시 실행되는 함수
+        document.getElementById('currentLocationBtn').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                // 위치 정보를 가져올 수 있는지 확인
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude; // 위도
+                    var lon = position.coords.longitude; // 경도
+                    var locPosition = new kakao.maps.LatLng(lat, lon); // 현재 위치 좌표 생성
+
+                    // 지도의 중심을 현위치로 이동
+                    map.setCenter(locPosition);
+
+                    // 사용자 정의 마커 이미지 설정
+                    var imageSrc = 'images/here.png'; // 사용하고자 하는 마커 이미지의 URL
+                    var imageSize = new kakao.maps.Size(30, 30); // 이미지 크기 설정
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                    // 현위치 마커 생성
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: locPosition,
+                        image: markerImage // 커스텀 마커 이미지 적용
+                    });
+
+                }, function(error) {
+                    console.error("위치 정보를 가져올 수 없습니다.", error);
+                });
+            } else {
+                alert("브라우저에서 위치 정보 사용을 지원하지 않습니다.");
+            }
+        });
+
+
+        // 재난 아이콘 숨김/표시 
+        document.getElementById('showIconsBtn').addEventListener('mouseover', function() {
+            var iconContainer = document.getElementById('iconContainer');
+            iconContainer.style.display = 'flex'; // 아이콘 컨테이너 보이기
+        });
+
+        document.getElementById('showIconsBtn').addEventListener('mouseout', function() {
+            var iconContainer = document.getElementById('iconContainer');
+            iconContainer.style.display = 'none'; // 아이콘 컨테이너 숨기기
+        });
+
+        var showIconsBtn = document.getElementById('showIconsBtn');
+        var iconContainer = document.getElementById('iconContainer');
+
+        // 버튼에 마우스를 올렸을 때 아이콘을 표시
+        showIconsBtn.addEventListener('mouseenter', function() {
+            iconContainer.style.display = 'flex';
+        });
+
+        // 버튼에서 마우스가 벗어나도 아이콘이 유지되도록 설정
+        iconContainer.addEventListener('mouseenter', function() {
+            iconContainer.style.display = 'flex';
+        });
+
+        // 아이콘 컨테이너에서 마우스가 벗어나면 아이콘을 숨김
+        iconContainer.addEventListener('mouseleave', function() {
+            iconContainer.style.display = 'none';
+        });
+
+        // 버튼에서 마우스가 벗어나면 아이콘을 숨김
+        showIconsBtn.addEventListener('mouseleave', function() {
+            iconContainer.style.display = 'none';
+        });
+
 </script>
 </body>
 </html>
