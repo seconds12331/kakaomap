@@ -1,7 +1,7 @@
 html, body {
     overflow-x: hidden; /* 수평 스크롤 숨기기 */
     overflow-y: hidden; /* 수평 스크롤 숨기기 */
-    padding : 0;
+    padding: 0;
 }
 
 /* .map_wrap와 그 하위 요소에 공통 스타일 적용 */
