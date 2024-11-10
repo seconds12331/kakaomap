@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>재난지도 test</title>
+    <title>재난지도</title>
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -116,9 +116,15 @@ function moveToCurrentLocation() {
             if (currentMarker) {
                 currentMarker.setMap(null);
             }
+            
+            var markerImage = new kakao.maps.MarkerImage(
+                'images/here.png', // 마커 이미지 파일 경로
+                new kakao.maps.Size(30, 30) // 이미지 크기 (가로, 세로)
+            );
 
             currentMarker = new kakao.maps.Marker({
-                position: currentLatLng
+                position: currentLatLng,
+                image : markerImage
             });
             currentMarker.setMap(map);
 
