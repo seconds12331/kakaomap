@@ -300,7 +300,7 @@ html, body {
         /* 커스텀 확대/축소 버튼 */
         .zoom-btn {
             position: absolute;
-            top : 140px;
+            top : 135px;
             right: 20px;
             display: flex;
             flex-direction: column;
