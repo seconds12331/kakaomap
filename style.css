@@ -88,7 +88,7 @@ html, body {
     display: none; /* 기본적으로 표시됨 */
     position: absolute;
     top: 50px;
-    left: 60px;
+    left: 70px;
     bottom: 0;
     width: 270px; /* 메뉴 너비 */
     height: 250px;
