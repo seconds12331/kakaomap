@@ -1,21 +1,37 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "login_db"); // 데이터베이스 연결 설정
+session_start();
+$conn = new mysqli("localhost", "root", "", "your_database_name");
+
+// 연결 확인
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username']; // 입력받은 사용자 이름
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // 비밀번호 암호화
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
 
-    // 데이터베이스에 사용자 정보 삽입
-    $stmt = $mysqli->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
+    if ($password !== $confirmPassword) {
+        echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
+        exit();
+    }
 
-    echo "회원가입이 완료되었습니다!";
+    // 비밀번호 해싱
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // 준비된 문을 사용하여 SQL 인젝션 방지
+    $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+    $stmt->bind_param("ss", $username, $hashedPassword);
+
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Registration successful']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error: User already exists']);
+    }
+
+    $stmt->close();
 }
-?>
 
-<form method="post" action="register.php">
-    <input type="text" name="username" placeholder="사용자 이름" required>
-    <input type="password" name="password" placeholder="비밀번호" required>
-    <button type="submit">회원가입</button>
-</form>
+$conn->close();
+?>
