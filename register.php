@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = new mysqli("localhost", "root", "", "your_database_name");
+$conn = new mysqli("localhost", "root", "", "login_db");
 
 // 연결 확인
 if ($conn->connect_error) {
