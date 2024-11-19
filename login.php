@@ -1,3 +1,7 @@
+header('Access-Control-Allow-Origin: https://seconds12331.github.io');
+header('Access-Control-Allow-Methods: POST');
+header('Content-Type: application/json');
+
 <?php
 session_start();
 $conn = new mysqli("localhost", "root", "", "login_db");
