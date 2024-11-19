@@ -8,8 +8,8 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userId = $_POST['user_id'];
-    $userPassword = $_POST['user_password'];
+    $userId = $_POST['username'];
+    $userPassword = $_POST['password'];
 
     // 준비된 문을 사용하여 SQL 인젝션 방지
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
