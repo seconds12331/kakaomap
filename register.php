@@ -1,4 +1,13 @@
 <?php
+header('Access-Control-Allow-Origin: https://seconds12331.github.io');
+header('Access-Control-Allow-Methods: POST');
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 session_start();
 $conn = new mysqli("localhost", "root", "", "login_db");
 
