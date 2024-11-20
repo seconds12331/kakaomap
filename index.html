@@ -24,7 +24,7 @@
         <div id="header-container2">
             <div class="option">
                 <div>
-                    <form onsubmit="searchPlaces(); toggleMenu_wrap(); return false;" method="post" style="display: flex; align-items: center;">
+                    <form onsubmit="searchPlaces(); toggleMenu_wrap(); return false;" style="display: flex; align-items: center;">
                         <input type="text" placeholder="주소 검색" id="keyword" size="15">
                         <div style="border-left: 1px solid #e2e2e2; height: 30px; margin: 0; display: inline-block;"></div> <!-- 세로선 추가 --> 
                         <button id="showMenuBtn" type="button">
@@ -242,8 +242,8 @@ function displayPlaces(places) {
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker();
     
-    // 검색 결과 1개만 표시
-    places = places.slice(0, 1);
+    // 검색 결과 중 상위 3개만 표시
+    places = places.slice(0, 3);
 
     for (var i = 0; i < places.length; i++) {
         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
@@ -297,8 +297,7 @@ function getListItem(index, places) {
                 '   <h5>' + places.place_name + '</h5>';
 
     if (places.road_address_name) {
-        itemStr += '    <span>' + places.road_address_name + '</span>' +
-                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+        itemStr += '    <span>' + places.road_address_name + '</span>';
     } else {
         itemStr += '    <span>' +  places.address_name  + '</span>'; 
     }
