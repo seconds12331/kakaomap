@@ -89,7 +89,6 @@ html, body {
     left: 90px;
     width: 250px; /* 메뉴 너비 */
     height: 140px;
-    margin: 10px 0;
     padding: 5px;
     background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
     z-index: 1; /* 지도 위에 표시되도록 설정 */
@@ -100,11 +99,6 @@ html, body {
 /* 메뉴 배경을 흰색으로 설정하는 클래스 */
 .bg_white {
     background: #fff;
-}
-
-/* 옵션 영역의 문단 간격 */
-#menu_wrap .option p {
-    margin: 10px 0;
 }
 
 /* 장소 목록 항목의 기본 스타일 */
@@ -122,7 +116,6 @@ html, body {
 /* 장소 목록 항목 내부 텍스트 스타일 */
 #placesList .item span {
     display: block;
-    margin-top: 4px;
 }
 
 /* 항목 제목(h5)과 정보(info)의 텍스트 넘침 처리 */
