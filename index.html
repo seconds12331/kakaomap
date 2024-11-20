@@ -242,8 +242,8 @@ function displayPlaces(places) {
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker();
     
-    // 검색 결과 중 상위 3개만 표시
-    places = places.slice(0, 3);
+    // 검색 결과 1개만 표시
+    places = places.slice(0, 1);
 
     for (var i = 0; i < places.length; i++) {
         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
