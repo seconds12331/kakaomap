@@ -88,7 +88,7 @@ html, body {
     top: 55px;
     left: 95px;
     width: 250px; /* 메뉴 너비 */
-    height: 140px;
+    height: 100px;
     padding: 5px;
     background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
     z-index: 1; /* 지도 위에 표시되도록 설정 */
