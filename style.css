@@ -150,11 +150,6 @@ html, body {
     color: #333; /* 텍스트 색상 */
 }
 
-/* 장소 정보(info)의 패딩 설정 */
-#placesList .item .info {
-    padding: 10px; /* 좌측 여백 추가 */
-}
-
 /* 장소 목록 마커 배경 스타일 */
 #placesList .item .markerbg {
     float: left;
