@@ -107,11 +107,6 @@ html, body {
     margin: 10px 0;
 }
 
-/* 옵션 영역 버튼의 왼쪽 여백 */
-#menu_wrap .option button {
-    margin-left: 5px;
-}
-
 /* 장소 목록 항목의 기본 스타일 */
 #placesList li {
     list-style: none; /* 리스트 스타일 제거 */
@@ -142,11 +137,6 @@ html, body {
     font-size: 15px; /* 제목 크기 조정 */
     font-weight: bold; /* 굵게 */
     color: #333; /* 텍스트 색상 */
-}
-
-/* 장소 정보(info)의 패딩 설정 */
-#placesList .item .info {
-    padding: 5px; /* 좌측 여백 추가 */
 }
 
 /* 각각의 마커 위치 설정 */
