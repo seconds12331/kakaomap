@@ -87,12 +87,10 @@ html, body {
     position: absolute;
     top: 50px;
     left: 90px;
-    bottom: 0;
     width: 250px; /* 메뉴 너비 */
     height: 140px;
-    margin: 10px;
+    margin: 10px 0;
     padding: 5px;
-    overflow-y: auto; /* 세로 스크롤 추가 */
     background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
     z-index: 1; /* 지도 위에 표시되도록 설정 */
     font-size: 12px;
