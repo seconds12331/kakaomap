@@ -92,7 +92,7 @@ html, body {
     bottom: 0;
     width: 250px; /* 메뉴 너비 */
     height: 140px;
-    margin: 10px;
+    margin: 5px;
     padding: 5px;
     overflow-y: auto; /* 세로 스크롤 추가 */
     background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
