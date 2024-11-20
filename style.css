@@ -104,11 +104,6 @@ html, body {
     background: #fff;
 }
 
-/* 옵션 영역 가운데 정렬 */
-#menu_wrap .option {
-    text-align: center;
-}
-
 /* 옵션 영역의 문단 간격 */
 #menu_wrap .option p {
     margin: 10px 0;
@@ -159,7 +154,6 @@ html, body {
 /* 각각의 마커 위치 설정 */
 #placesList .item .marker_1 {
     background-position: 0 -10px;  }
-
 
 #header-container2 {
     z-index: 1;
