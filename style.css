@@ -145,7 +145,7 @@ html, body {
 }
 
 #placesList .item h5 {
-    font-size: 18px; /* 제목 크기 조정 */
+    font-size: 10px; /* 제목 크기 조정 */
     font-weight: bold; /* 굵게 */
     color: #333; /* 텍스트 색상 */
 }
@@ -153,11 +153,6 @@ html, body {
 /* 장소 정보(info)의 패딩 설정 */
 #placesList .item .info {
     padding: 10px; /* 좌측 여백 추가 */
-}
-
-/* 정보 영역에서 부가 주소 회색 */
-#placesList .info .gray {
-    color: #8a8a8a;
 }
 
 /* 장소 목록 마커 배경 스타일 */
