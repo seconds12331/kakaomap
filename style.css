@@ -142,6 +142,7 @@ html, body {
     text-overflow: ellipsis; /* 넘칠 경우 말줄임표 */
     overflow: hidden; /* 넘침 숨김 */
     white-space: nowrap; /* 한 줄로 표시 */
+    text-align: left;
 }
 
 #placesList .item h5 {
