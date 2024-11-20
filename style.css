@@ -85,8 +85,8 @@ html, body {
 #menu_wrap {
     display: none; /* 기본적으로 표시됨 */
     position: absolute;
-    top: 50px;
-    left: 90px;
+    top: 55px;
+    left: 95px;
     width: 250px; /* 메뉴 너비 */
     height: 140px;
     padding: 5px;
