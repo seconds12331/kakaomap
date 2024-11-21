@@ -105,8 +105,8 @@ html, body {
 
 /* 장소 목록 항목의 기본 스타일 */
 #placesList {
-    margin : 0 0 0 10px;
-    padding : 0 0 0 10px;
+    margin : 0 0 0 5px;
+    padding : 0 0 0 5px;
 }
 
 #placesList li {
