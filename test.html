@@ -27,11 +27,12 @@
 <script>
     let geoJsonData;
     fetch('./ggdata.geojson')
-        .then(response => response.json())
-        .then(data => {
-            geoJsonData = data;
-            displayGeoJson(geoJsonData);
-        })
+    .then(response => response.json())
+    .then(data => {
+        geoJsonData = data;
+        displayGeoJson(geoJsonData); // 데이터를 로드한 후에 호출
+    });
+
 
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -41,10 +42,16 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 var currentMarker = null; // 현 위치 마커
 var markers = []; // 검색된 마커들을 저장할 배열
 
-// 카카오 지도 API 로드 후 실행될 함수
 kakao.maps.load(function () {
-    // 페이지 로드 시 바로 현 위치로 지도 초기화
-    moveToCurrentLocation();
+    moveToCurrentLocation(); // 지도 생성 및 초기화
+
+    // GeoJSON 데이터는 지도 생성 후 표시
+    fetch('./ggdata.geojson')
+        .then(response => response.json())
+        .then(data => {
+            geoJsonData = data;
+            displayGeoJson(geoJsonData);
+        });
 });
 
 // 새로 고침 시 현 위치로 이동하는 함수
@@ -100,27 +107,39 @@ function moveToCurrentLocation() {
     }
 }
 
-    function displayGeoJson(geoJson) {
-        const features = geoJson.features;
+function displayGeoJson(geoJson) {
+    const features = geoJson.features;
 
-        features.forEach(feature => {
-            const geometry = feature.geometry;
-            const coordinates = geometry.coordinates[0]; // GeoJSON은 경계를 배열로 가짐
+    features.forEach(feature => {
+        const geometry = feature.geometry;
+        const type = geometry.type; // Geometry 타입 확인 (Polygon, MultiPolygon 등)
+        const coordinates = geometry.coordinates;
 
-            const path = coordinates.map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
-
-            const polygon = new kakao.maps.Polygon({
-                path: path,
-                strokeWeight: 2,
-                strokeColor: '#004c80',
-                strokeOpacity: 0.8,
-                fillColor: '#00a9ff',
-                fillOpacity: 0.7
+        if (type === "Polygon") {
+            drawPolygon(coordinates);
+        } else if (type === "MultiPolygon") {
+            coordinates.forEach(polygonCoords => {
+                drawPolygon(polygonCoords);
             });
+        }
+    });
+}
 
-            polygon.setMap(map); // 지도에 폴리곤 추가
-        });
-    }
+function drawPolygon(coordinates) {
+    const path = coordinates[0].map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
+
+    const polygon = new kakao.maps.Polygon({
+        path: path,
+        strokeWeight: 2,
+        strokeColor: '#004c80',
+        strokeOpacity: 0.8,
+        fillColor: '#00a9ff',
+        fillOpacity: 0.7
+    });
+
+    polygon.setMap(map);
+}
+
 
     displayGeoJson(geoJsonData); // 직접 포함된 데이터를 표시
 </script>
