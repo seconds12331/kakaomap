@@ -3,19 +3,16 @@
 <head>
     <meta charset="utf-8">
     <title>재난지도</title>
-    
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 <div class="map_wrap">
     <div id="map" style="width:100%;height:99vh;position:relative;overflow:hidden;"></div>
 
-  <div style="position: absolute; z-index:10; right:200px; top:30px;">
-    <input type="text" id="region" placeholder="시, 군, 구 입력">
-    <button id="drawRegionBtn">지도 그리기</button>
-  </div>
-
+    <div style="position: absolute; z-index:10; right:200px; top:30px;">
+        <input type="text" id="region" placeholder="시, 군, 구 입력">
+        <button id="drawRegionBtn">지도 그리기</button>
+    </div>
 
     <div class="header-container4">  <!-- 게시판 페이지 이동 -->
         <a href="index.html" class="link">게시판</a>
@@ -23,125 +20,121 @@
 </div>
 
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=63a22465d97db6dcfc104647d90a6d3b&libraries=services"></script>
-
 <script>
-    let geoJsonData;
-    fetch('./ggdata.geojson')
-    .then(response => response.json())
-    .then(data => {
-        geoJsonData = data;
-        displayGeoJson(geoJsonData); // 데이터를 로드한 후에 호출
+    let map, geoJsonData;
+
+    // 지도 생성 및 초기화
+    kakao.maps.load(() => {
+        moveToCurrentLocation();
+
+        // GeoJSON 데이터 로드
+        fetch('./ggdata.geojson')
+            .then(response => response.json())
+            .then(data => {
+                geoJsonData = data;
+                displayGeoJson(geoJsonData); // GeoJSON 데이터를 지도에 표시
+            });
     });
 
+    // 현 위치로 지도 이동
+    function moveToCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const currentLatLng = new kakao.maps.LatLng(lat, lng);
 
-
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption, map;
-
-// 현 위치를 저장할 변수
-var currentMarker = null; // 현 위치 마커
-var markers = []; // 검색된 마커들을 저장할 배열
-
-kakao.maps.load(function () {
-    moveToCurrentLocation(); // 지도 생성 및 초기화
-
-    // GeoJSON 데이터는 지도 생성 후 표시
-    fetch('./ggdata.geojson')
-        .then(response => response.json())
-        .then(data => {
-            geoJsonData = data;
-            displayGeoJson(geoJsonData);
-        });
-});
-
-// 새로 고침 시 현 위치로 이동하는 함수
-function moveToCurrentLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = position.coords.latitude, // 위도
-                lng = position.coords.longitude; // 경도
-
-            var currentLatLng = new kakao.maps.LatLng(lat, lng);
-            
-            // 지도 객체가 없으면 새로 생성, 이미 있으면 위치만 이동
-            if (!map) {
-                mapOption = {
-                    center: currentLatLng,  // 현 위치로 지도 중심 설정
-                    level: 3  // 지도 확대 수준
+                const mapOption = {
+                    center: currentLatLng, // 지도 중심을 현재 위치로 설정
+                    level: 3 // 확대 수준
                 };
-                map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
-            } else {
-                map.setCenter(currentLatLng); // 기존 지도 위치 이동
-            }
 
-            // 현 위치 마커 추가 (기존 마커가 있으면 제거 후 추가)
-            if (currentMarker) {
-                currentMarker.setMap(null);
-            }
-            
-            var markerImage = new kakao.maps.MarkerImage(
-                'images/here.png', // 마커 이미지 파일 경로
-                new kakao.maps.Size(30, 30) // 이미지 크기 (가로, 세로)
-            );
+                map = new kakao.maps.Map(document.getElementById('map'), mapOption);
 
-            currentMarker = new kakao.maps.Marker({
-                position: currentLatLng,
-                image : markerImage
+                // 현재 위치 마커 추가
+                const markerImage = new kakao.maps.MarkerImage(
+                    'images/here.png', // 마커 이미지
+                    new kakao.maps.Size(30, 30) // 이미지 크기
+                );
+
+                const currentMarker = new kakao.maps.Marker({
+                    position: currentLatLng,
+                    image: markerImage
+                });
+                currentMarker.setMap(map);
+            }, () => {
+                alert("위치를 가져올 수 없습니다.");
+                initializeMap(); // 기본 중심 위치로 지도 초기화
             });
-            currentMarker.setMap(map);
-
-        }, function(error) {
-            alert("위치를 가져올 수 없습니다.");
-
-            var mapContainer = document.getElementById('map'),
-            mapOption = {
-            center: new kakao.maps.LatLng(37.55170, 126.98226),
-            level: 5,
-            mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도 타입 설정
-            
+        } else {
+            alert("이 브라우저는 위치 정보를 지원하지 않습니다.");
+            initializeMap(); // 기본 중심 위치로 지도 초기화
         }
-        map = new kakao.maps.Map(mapContainer, mapOption);
-        });
-    } else {
-        alert("이 브라우저는 위치 정보를 지원하지 않습니다.");
     }
-}
 
-function displayGeoJson(geoJson) {
-    const features = geoJson.features;
+    // 기본 지도 초기화
+    function initializeMap() {
+        const mapOption = {
+            center: new kakao.maps.LatLng(37.55170, 126.98226),
+            level: 5
+        };
+        map = new kakao.maps.Map(document.getElementById('map'), mapOption);
+    }
 
-    features.forEach(feature => {
-        const geometry = feature.geometry;
-        const type = geometry.type; // Geometry 타입 확인 (Polygon, MultiPolygon 등)
-        const coordinates = geometry.coordinates;
+    // GeoJSON 데이터를 지도에 표시
+    function displayGeoJson(geoJson) {
+        const features = geoJson.features;
 
-        if (type === "Polygon") {
-            drawPolygon(coordinates);
-        } else if (type === "MultiPolygon") {
-            coordinates.forEach(polygonCoords => {
-                drawPolygon(polygonCoords);
-            });
+        features.forEach(feature => {
+            const geometry = feature.geometry;
+            const type = geometry.type;
+            const coordinates = geometry.coordinates;
+
+            if (type === "Polygon") {
+                drawPolygon(coordinates);
+            } else if (type === "MultiPolygon") {
+                coordinates.forEach(polygonCoords => {
+                    drawPolygon(polygonCoords);
+                });
+            }
+        });
+    }
+
+    // 폴리곤 그리기
+    function drawPolygon(coordinates) {
+        const path = coordinates[0].map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
+
+        const polygon = new kakao.maps.Polygon({
+            path: path,
+            strokeWeight: 2,
+            strokeColor: '#004c80',
+            strokeOpacity: 0.8,
+            fillColor: '#00a9ff',
+            fillOpacity: 0.7
+        });
+
+        polygon.setMap(map);
+    }
+
+    // 특정 지역만 표시
+    document.getElementById('drawRegionBtn').addEventListener('click', () => {
+        const regionName = document.getElementById('region').value.trim();
+
+        if (!geoJsonData) {
+            alert("GeoJSON 데이터를 아직 로드하지 못했습니다.");
+            return;
+        }
+
+        // GeoJSON 데이터에서 해당 지역 찾기
+        const feature = geoJsonData.features.find(feature => feature.properties.name === regionName);
+
+        if (feature) {
+            // 지도에 해당 지역만 표시
+            displayGeoJson({ features: [feature] });
+        } else {
+            alert("해당 지역을 찾을 수 없습니다.");
         }
     });
-}
-
-function drawPolygon(coordinates) {
-    const path = coordinates[0].map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
-
-    const polygon = new kakao.maps.Polygon({
-        path: path,
-        strokeWeight: 2,
-        strokeColor: '#004c80',
-        strokeOpacity: 0.8,
-        fillColor: '#00a9ff',
-        fillOpacity: 0.7
-    });
-
-    polygon.setMap(map);
-}
-
-
-    displayGeoJson(geoJsonData); // 직접 포함된 데이터를 표시
 </script>
 </body>
 </html>
