@@ -13,9 +13,10 @@
         <a href="index.html" class="link">홈으로</a>
     </div>
 
-    <div class="dropdown" style="position: absolute; top: 10px; right: 10px; z-index: 2;">
-        <button class="dropdown-btn" onclick="toggleDropdown()">▼ 메뉴 열기</button>
-        <div class="dropdown-content" id="dropdownContent">            <a href="#">지진</a>
+    <div class="dropdown">
+        <button class="dropdown-btn" onclick="toggleDropdown()">재난 선택▼</button>
+        <div class="dropdown-content" id="dropdownContent">            
+            <a href="#" onclick="selectOption('지진')">지진</a>
             <a href="#" onclick="selectOption('폭염')">폭염</a>
             <a href="#" onclick="selectOption('폭우')">폭우</a>
             <a href="#" onclick="selectOption('태풍')">태풍</a>
