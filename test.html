@@ -10,7 +10,19 @@
 <div class="map_wrap">
     <div id="map" style="width:100%;height:99vh;position:relative;overflow:hidden;"></div>
     <div class="header-container4">
-        <a href="index.html" class="link">게시판</a>
+        <a href="index.html" class="link">홈으로</a>
+    </div>
+
+    <div class="dropdown" style="position: absolute; top: 10px; right: 10px; z-index: 2;">
+        <button class="dropdown-btn" onclick="toggleDropdown()">▼ 메뉴 열기</button>
+        <div class="dropdown-content" id="dropdownContent">            <a href="#">지진</a>
+            <a href="#" onclick="selectOption('폭염')">폭염</a>
+            <a href="#" onclick="selectOption('폭우')">폭우</a>
+            <a href="#" onclick="selectOption('태풍')">태풍</a>
+            <a href="#" onclick="selectOption('화재')">화재</a>
+            <a href="#" onclick="selectOption('실종')">실종</a>
+            <a href="#" onclick="selectOption('긴급재난')">긴급재난</a>
+        </div>
     </div>
 </div>
 
@@ -20,47 +32,35 @@
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-        level: 12 // 지도의 확대 레벨
+        level: 10 // 지도의 확대 레벨
     };
 
 let map = new kakao.maps.Map(mapContainer, mapOption),
     customOverlay = new kakao.maps.CustomOverlay({});
 
-let bounds = new kakao.maps.LatLngBounds(
+    let bounds = new kakao.maps.LatLngBounds(
     new kakao.maps.LatLng(34.0, 125.0), // 남서쪽 좌표 (위도, 경도)
     new kakao.maps.LatLng(39.5, 132.0)  // 북동쪽 좌표 (위도, 경도)
-);
-
-// 지도에 이동 제한 설정
-map.setMaxBounds(bounds);
+)
 
 // 지도 이동 이벤트로 제한 보완
 kakao.maps.event.addListener(map, 'dragend', function () {
     let center = map.getCenter();
     if (!bounds.contain(center)) {
+        // 지도 중심이 제한된 범위를 벗어나면 제한된 범위의 중심으로 이동
         map.panTo(bounds.getCenter());
     }
 });
 
-let detailMode = false; // level에 따라 다른 json 파일 사용
-let level = '';
 let polygons = [];
 let areas = []; // areas 배열 초기화
 
 // 초기 JSON 데이터 로드
-init("./sido.json"); // 초기 시작
+init("./sig.json"); // 초기 시작
 
 kakao.maps.event.addListener(map, 'zoom_changed', function () {
-    level = map.getLevel();
-    if (!detailMode && level <= 10) {
-        detailMode = true;
-        removePolygon();
-        init("./sig.json");
-    } else if (detailMode && level > 10) {
-        detailMode = false;
-        removePolygon();
-        init("./sido.json");
-    }
+    removePolygon();
+    init("./sig.json");
 });
 
 // 모든 폴리곤을 지우는 함수
@@ -103,43 +103,52 @@ function init(path) {
     });
 }
 
-// 폴리곤을 지도에 표시하는 함수
+// 폴리곤 생성 후 폴리곤에 대한 로그 추가
 function displayArea(area) {
+    console.log('폴리곤 경로:', area.path);  // 각 지역의 경로를 콘솔에 출력하여 확인
     var polygon = new kakao.maps.Polygon({
         map: map,
         path: area.path,
         strokeWeight: 2,
         strokeColor: '#004c80',
-        strokeOpacity: 0.8,
+        strokeOpacity: 0.5,
         fillColor: '#fff',
-        fillOpacity: 0.7
+        fillOpacity: 0.5
     });
     polygons.push(polygon);
 
-    kakao.maps.event.addListener(polygon, 'mouseover', function (mouseEvent) {
-        polygon.setOptions({fillColor: '#09f'});
-        customOverlay.setContent('<div class="area">' + area.name + '</div>');
-        customOverlay.setPosition(mouseEvent.latLng);
-        customOverlay.setMap(map);
-    });
-
-    kakao.maps.event.addListener(polygon, 'mousemove', function (mouseEvent) {
-        customOverlay.setPosition(mouseEvent.latLng);
-    });
-
-    kakao.maps.event.addListener(polygon, 'mouseout', function () {
-        polygon.setOptions({fillColor: '#fff'});
-        customOverlay.setMap(null);
-    });
-
-    kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
-        if (!detailMode) {
-            map.setLevel(10); // 확대 레벨 변경
-            var latlng = mouseEvent.latLng;
-            map.panTo(latlng); // 클릭한 위치로 이동
-        }
-    });
+    // 폴리곤을 기본적으로 보이지 않도록 설정
+    //polygon.setMap(null);
 }
+
+
+
+function toggleDropdown() {
+    const dropdown = document.getElementById("dropdownContent");
+    dropdown.classList.toggle("show");
+}
+
+// 옵션을 클릭했을 때 버튼 텍스트 변경
+function selectOption(optionText) {
+    const button = document.querySelector(".dropdown-btn");
+    button.textContent = optionText;
+    // 드롭다운 메뉴 닫기
+    document.getElementById("dropdownContent").classList.remove("show");
+}
+
+// 페이지 외부 클릭 시 드롭다운 닫기
+window.onclick = function(event) {
+    if (!event.target.matches('.dropdown-btn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+};
+
 </script>
 </body>
 </html>
