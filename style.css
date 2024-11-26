@@ -85,12 +85,12 @@ html, body {
 #menu_wrap {
     display: none; /* 기본적으로 표시됨 */
     position: absolute;
-    top: 55px;
-    left: 95px;
+    top: 50px;
+    left: 90px;
     width: 250px; /* 메뉴 너비 */
-    height: 120px;
-    padding: 0 10px;
-    margin : 10px;
+    height: 140px;
+    padding: 0;
+    margin : 0;
     background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
     z-index: 1; /* 지도 위에 표시되도록 설정 */
     font-size: 12px;
@@ -105,8 +105,8 @@ html, body {
 
 /* 장소 목록 항목의 기본 스타일 */
 #placesList {
-    margin : 0 0 0 5px;
-    padding : 0 0 0 5px;
+    margin : 0;
+    padding : 0;
 }
 
 #placesList li {
@@ -132,7 +132,7 @@ html, body {
     text-overflow: ellipsis; /* 넘칠 경우 말줄임표 */
     overflow: hidden; /* 넘침 숨김 */
     white-space: nowrap; /* 한 줄로 표시 */
-    max-width: 85%;
+    max-width: 95%;
     display: block;
     text-align: left;
 }
@@ -291,4 +291,44 @@ html, body {
         #currentLocationBtn {
             position: absolute;
             top : -40px;
+        }
+
+
+
+
+        .dropdown {
+            top: 10px; /* 상단에서의 위치 */
+            left: 20px; /* 좌측에서의 위치 */
+            z-index: 10; /* 지도보다 위에 표시 */
+            position: absolute;
+            display: inline-block;
+        }
+        .dropdown-btn {
+            background-color: #004c80;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .show {
+            display: block;
         }
