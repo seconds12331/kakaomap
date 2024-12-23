@@ -1,0 +1,68 @@
+<!--새글 페이지-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>새글</title>
+    <link rel="stylesheet" href="layout.css">
+</head>
+
+<body>
+    <!-- 네비게이션 바 -->
+    <div class="navbar">
+      <a href="index.html" style="font-size:20px; font-weight: bold;">지도</a>
+      <a href="forum.html" style="font-size:20px; font-weight: bold;">게시판</a>
+      <a href="mforum.html" style="font-size:20px; font-weight: bold;">재난문자</a>
+      <a href="cforum.html" style="font-size:20px; font-weight: bold;">문의</a>
+    </div>
+
+    <div class="content" id="content">
+        <div class="level1_titleWrap">
+            <h2 class="level1_title">새 글</h2>
+        </div>
+    </div>
+
+    <div class="scroll-table" style="width:1200px;">
+        <table class="borad-taable horizon">
+            <colgroup>
+                <col class="new_1">
+                <col class="new_2">
+            </colgroup>
+
+            <thead>
+                <tr>
+                    <th class="new_1">제목</th>
+                    <th class="new_2">
+                        <input type="text" class="search_input" onkeydown="search_val_v_onkeydown()" id="searchWrd" title="제목입력">
+                    </th>
+                </tr>
+                <tr class>
+                    <th class="new_1">작성일</th>
+                    <th class="new_2">
+                        <input type="text" class="search_input" onkeydown="search_val_v_onkeydown()" id="searchWrd" title="날짜입력">
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="scroll-table" style="width:1200px;">
+        <table class="borad-taable horizon" style="width: 100%;">
+            <tr>
+                <td>
+                    <textarea 
+                    onkeydown="search_val_v_onkeydown()" 
+                    style="width: 99%; height: 800px; box-sizing: border-box; text-align: left; vertical-align: top; resize: none; font-size: 20px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <a class="creat_btn" href="forum.html" style="left: 1250px;">작성완료</a>
+
+    <script>
+
+    </script>
+</body>
+</html>

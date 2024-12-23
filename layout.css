@@ -1,0 +1,260 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #333;
+	color: white;
+	padding: 5px;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+    height:50px;
+}
+
+/* 네비게이션 바 항목 스타일 */
+.navbar a {
+	color: white;
+	text-decoration: none;
+	padding: 10px 15px;
+	transition: background-color 0.3s;
+}
+
+/* 링크 호버 효과 */
+.navbar a:hover {
+	background-color: #555;
+	border-radius: 5px;
+}
+
+
+
+/* 기본 설정 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 본문 내용 */
+.content {
+    max-width: 1000px;
+    margin: 70px auto;
+    padding: 10px 80px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 제목 스타일 */
+.level1_titleWrap {
+    text-align: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.level1_title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #0056b3;
+    margin: 0;
+}
+
+/* 검색 박스 스타일 */
+.boardSearch_box {
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* 항목 간 간격 */
+}
+
+/* 각 검색 폼 요소 스타일 */
+.boardSearch_formCell {
+    display: flex; /* 라벨과 입력 요소를 가로로 정렬 */
+    flex-wrap: wrap;
+    align-items: center;
+    padding-right : 500px;
+    gap: 10px; /* 라벨과 입력 요소 간격 */
+    flex: 1 1 calc(50% - 10px); /* 각 항목의 크기를 화면 너비에 맞게 조정 */
+    min-width: 800px; /* 최소 크기 설정 */
+}
+
+/* 라벨 스타일 */
+.sch_label {
+    font-size: 17px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 드롭다운, 인풋 스타일 */
+.boardSearch_select,
+.search_input,
+.calendar_input {
+    padding: 8px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 70%;
+    box-sizing: border-box;
+}
+
+.search_input {
+    width:81%;
+}
+
+/* 날짜 검색 스타일 */
+#test {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 날짜 입력 필드 간격 */
+}
+
+/* 검색 버튼 스타일 */
+.search_btn {
+    position:relative;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 4px;
+    font-size: 17px;
+    cursor: pointer;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    left : 940px;
+}
+
+.search_btn:hover {
+    background-color: #003d80;
+}
+
+.calendar_input {
+    width: calc(50% - 10px);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .boardSearch_formCell {
+        flex: 1 1 100%;
+    }
+
+    .navbar {
+        flex-direction: column;
+    }
+}
+
+/* 스크롤 가능한 테이블 컨테이너 */
+.scroll-table {
+    display: flex;
+    max-width: 90%; /* 부모 요소에 맞춰 테이블 크기 제한 */
+    overflow-x: auto; /* 수평 스크롤 추가 */
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* 테이블 기본 스타일 */
+  .borad-taable {
+    width: 100%;
+    border-collapse: collapse; /* 테두리 중복 제거 */
+    font-family: 'Arial', sans-serif;
+    font-size: 17px;
+  }
+  
+  /* 컬럼 크기 설정 */
+  .col-num { width: 5%; }
+  .col-div { width: 15%; }
+  .col-subject { width: 40%; }
+  .col-write { width: 10%; }
+  .col-date { width: 15%; }
+  .col-acess { width: 5%; }
+  .col-file { width: 5%; }
+
+  .col-num1 { width: 10%; }
+  .col-dis { width: 15%; }
+  .col-reg { width: 20%; }
+  .col-sen { width: 15%; }
+  .col-mes { width: 40%; }
+
+  .col-new_1 { width: 5%; }
+  .col-new_2 { width: 95%; }
+
+
+  /* 테이블 헤더 스타일 */
+  .borad-taable thead th {
+    background-color: #f5f5f5;
+    color: #333;
+    text-align: center;
+    padding: 10px 5px;
+    border-bottom: 2px solid #ddd;
+    font-weight: bold;
+  }
+  
+  /* 테이블 본문 스타일 */
+  .borad-taable tbody td {
+    text-align: center;
+    padding: 8px 5px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  /* 강조된 줄 (공지사항) */
+  .borad-taable tbody .notice {
+    background-color: #f9f9f9;
+    font-weight: bold;
+  }
+  
+  /* 짝수 행 스타일 */
+  .borad-taable tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+  
+  /* 짝수 행 호버 효과 */
+  .borad-taable tbody tr:hover {
+    background-color: #e8f0ff;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  /* 첨부파일이 없는 셀 스타일 */
+  .borad-taable .td-file {
+    color: red; /* 파일 없음 강조 */
+  }
+  
+  /* 테이블 끝의 마지막 셀 테두리 제거 */
+  .borad-taable tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+/* 새글 버튼 스타일 */
+.creat_btn {
+    position:relative;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 4px;
+    font-size: 17px;
+    cursor: pointer;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    top : 10px;
+    left : 1380px;
+}
+
+.creat_btn:hover {
+    background-color: #003d80;
+}

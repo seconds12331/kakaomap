@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>재난지도</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+<div class="map_wrap">
+    <div id="map" style="width:100%;height:99vh;position:relative;overflow:hidden;"></div>
+
+  <div class="daumIndex">
+    <fieldset class="fld_inside"> <!-- 제목 및 검색창 배경 박스 -->
+        <div class="header-container">
+            <div class="title-container">
+                <h2 class="Title">
+                    <a id="local" class="local" href="?nil_profile=title&nil_scr=local">재난지도</a>
+                </h2>
+            </div>
+        </div>
+
+        <div id="header-container2">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); toggleMenu_wrap(); return false;" style="display: flex; align-items: center;">
+                        <input type="text" placeholder="주소 검색" id="keyword" size="15">
+                        <div style="border-left: 1px solid #e2e2e2; height: 30px; margin: 0; display: inline-block;"></div> <!-- 세로선 추가 --> 
+                        <button id="showMenuBtn" type="button">
+                            <img src="images/dodbogi.png" alt="검색" style="max-width: 20px; max-height: 20px;">
+                        </button>
+                    
+                        <div id="menu_wrap">
+                            <button id="closeMenuBtn"  type="button" style="position: absolute; top: 5px; right: 5px; background: transparent; border: none; font-size: 12px; cursor: pointer;">X</button> <!--검색 결과 닫기 버튼-->
+                            <div class="option">
+                                <ul id="placesList"></ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="icons-container">
+            <div class="box_Icons">
+                <button id="showIconsBtn">재난</button>
+                <div id="iconContainer" class="hidden">
+                    <button class="icon" alt="earth"><img src="images/earth.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">지진</button>
+                    <button class="icon" alt="heat" ><img src="images/heat.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">폭염</button>
+                    <button class="icon" alt="rain"><img src="images/rain.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">폭우</button>
+                    <button class="icon" alt="typh"><img src="images/typh.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">태풍</button>
+                    <button class="icon" alt="fire"><img src="images/fire.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">화재</button>
+                    <button class="icon" alt="missing"><img src="images/missing.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">실종</button>
+                    <button class="special-icon" alt="emg"><img src="images/smRlavy.png" style="max-width: 35px; max-height: 40px; vertical-align: middle;">긴급재난</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+  </div>
+
+    <div class="header-container3">  <!-- 로그인 페이지 이동 -->
+        <a href="login.html" class="link">로그인</a>
+    </div>
+
+    <div class="header-container4">  <!-- 게시판 페이지 이동 -->
+        <a href="forum.html" class="link">게시판</a>
+    </div>
+
+    <!-- 커스텀 확대/축소 버튼 -->
+    <div class="zoom-btn">
+        <button id="currentLocationBtn" style="padding : 5px 5px"><img src="images/bhere.png"></button>
+        <button id="zoomInBtn">+</button>
+        <button id="zoomOutBtn" style="font-size: 22px;">-</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=63a22465d97db6dcfc104647d90a6d3b&libraries=services"></script>
+<script>
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption, map;
+
+// 카카오 지도 API 로드 후 실행될 함수
+kakao.maps.load(function () {
+    // 지도 초기화
+    initMap();
+    
+    // 지도 초기화가 완료된 후 JSON을 불러오도록 수정
+    loadPolygonData('./sido.json');
+});
+
+// 지도 초기화
+function initMap() {
+    var defaultLatLng = new kakao.maps.LatLng(36.3, 127.4);  // 서울의 기본 위치
+    mapOption = {
+        center: defaultLatLng,  // 기본 위치로 지도 중심 설정
+        level: 12  // 지도 확대 수준
+    };
+    map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+}
+// 경로 설정
+const path = './sido.json';  
+
+// 폴리곤 데이터 로드 함수
+function loadPolygonData(path) {
+    fetch(path)
+    .then(response => response.json())
+    .then(geojson => {
+        const classes = geojson.classes;
+        for (const [className, classData] of Object.entries(classes)) {
+            const color = classData.color;
+            const features = classData.features;
+            features.forEach(feature => {
+                const coordinates = feature.coordinates[0];  // 다차원 배열에서 첫 번째 좌표 배열을 사용
+                const area = {
+                    name: feature.properties.SIG_KOR_NM,
+                    path: coordinates.map(coord => new kakao.maps.LatLng(coord[1], coord[0])),  // [위도, 경도] 순으로 변환
+                    color: color,
+                    disasterType: className  // 여기에 disasterType 추가
+                };
+                displayArea(area);
+            });
+        }
+    })
+    .catch(error => console.error('JSON 로드 실패:', error));
+}
+
+let polygons = [];  // 폴리곤 배열을 전역에서 선언하고 초기화
+let selectedClass = null; // 선택된 재난 클래스
+
+// 버튼 클릭 시 해당 클래스의 폴리곤만 색상 변경
+$(".special-icon").on("click", function() {
+    const clickedClass = $(this).attr("alt"); // 버튼의 alt 값으로 선택된 클래스 설정
+
+    // 이미 선택된 클래스라면 선택 해제 및 원래 색으로 복원
+    if (selectedClass === clickedClass) {
+        selectedClass = null; // 선택 해제
+        resetPolygonColors(); // 모든 폴리곤을 원래 색으로 복원
+    } else {
+        selectedClass = clickedClass; // 선택된 클래스를 갱신
+        changePolygonColor(selectedClass); // 선택된 클래스의 폴리곤만 색상 변경
+    }
+});
+
+$(".icon").on("click", function() {
+    const clickedClass = $(this).attr("alt"); // 버튼의 alt 값으로 선택된 클래스 설정
+
+    // 이미 선택된 클래스라면 선택 해제 및 원래 색으로 복원
+    if (selectedClass === clickedClass) {
+        selectedClass = null; // 선택 해제
+        resetPolygonColors(); // 모든 폴리곤을 원래 색으로 복원
+    } else {
+        selectedClass = clickedClass; // 선택된 클래스를 갱신
+        changePolygonColor(selectedClass); // 선택된 클래스의 폴리곤만 색상 변경
+    }
+});
+
+
+// 폴리곤 색상 변경 함수
+function changePolygonColor(selectedClass) {
+    polygons.forEach(polygon => {
+        // polygon에 저장된 className과 selectedClass가 일치할 경우만 색상 변경
+        if (polygon.disasterType === selectedClass) {
+            polygon.setOptions({
+                fillColor : "#FFFFFF" // 선택된 재난 클래스의 색상
+            });
+        } else {
+            polygon.setOptions({
+                fillColor : polygon.originalColor
+            });
+        }
+    });
+}
+
+// 모든 폴리곤을 원래 색상으로 복원하는 함수
+function resetPolygonColors() {
+    polygons.forEach(polygon => {
+        polygon.setOptions({
+            fillColor : polygon.originalColor // 원래 색상
+        });
+    });
+}
+
+// 폴리곤 생성 함수
+function displayArea(area) {
+    const polygon = new kakao.maps.Polygon({
+        map: map,
+        path: area.path,
+        strokeWeight: 1,
+        strokeColor: "black",
+        strokeOpacity: 1,
+        fillColor: area.color,
+        fillOpacity: 0.6
+    });
+
+    // 폴리곤에 disasterType과 원래 색상(originalColor) 저장
+    polygon.disasterType = area.disasterType; // disasterType을 추가
+    polygon.originalColor = area.color;
+
+    // 마우스 오버 시 재난 종류 표시 기능 제거
+    kakao.maps.event.addListener(polygon, 'mouseover', function () {});
+
+    // 마우스 아웃 시 재난 종류 숨기기 기능 제거
+    kakao.maps.event.addListener(polygon, 'mouseout', function () {});
+
+    polygons.push(polygon);
+}
+
+
+
+var showMenuBtn = document.getElementById('showMenuBtn');
+var menu_wrap = document.getElementById('menu_wrap');
+
+// 버튼을 클릭하거나 엔터 키를 눌렀을 때 검색 결과를 표시하거나 숨기기
+showMenuBtn.addEventListener('click', function() {
+    searchPlaces();
+    toggleMenu_wrap();
+});
+
+showMenuBtn.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        searchPlaces();
+        toggleMenu_wrap();
+    }
+});
+
+document.getElementById('keyword').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // 기본 엔터키 동작 방지
+        searchPlaces(); // 검색 함수 실행
+        toggleMenu_wrap(); // 메뉴 표시 전환
+    }
+});
+
+
+//검색 결과를 표시하거나 숨기는 함수
+function toggleMenu_wrap() {
+    // 현재 display 상태에 따라 표시/숨기기
+    if (menu_wrap.style.display === 'none' || menu_wrap.style.display === '') {
+        menu_wrap.style.display = 'flex';
+    } else {
+        return;
+    }
+}
+
+
+// X 버튼 클릭 시 메뉴 숨기기 기능 추가
+document.getElementById('closeMenuBtn').addEventListener('click', function() {
+    menu_wrap.style.display = 'none';
+});
+
+// 장소 검색 객체를 생성
+var ps = new kakao.maps.services.Places();  
+
+// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성
+var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+// 키워드 검색을 요청하는 함수
+function searchPlaces() {
+    var keyword = document.getElementById('keyword').value;
+
+    if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        alert('키워드를 입력해주세요!');
+        return false;
+    }
+
+    // 검색 실행 시 메뉴를 표시하도록 설정
+    document.getElementById('placesList').style.display = 'block';
+    
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청
+    ps.keywordSearch( keyword, placesSearchCB); 
+}
+
+// 장소검색이 완료됐을 때 호출되는 콜백함수
+function placesSearchCB(data, status) {
+    if (status === kakao.maps.services.Status.OK) {
+
+        // 정상적으로 검색이 완료됐으면
+        // 검색 목록과 마커를 표출
+        displayPlaces(data);
+
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+        alert('검색 결과가 존재하지 않습니다.');
+        return;
+
+    } else if (status === kakao.maps.services.Status.ERROR) {
+
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
+
+    }
+}
+
+// 검색 결과 목록과 마커를 표출하는 함수입니다
+function displayPlaces(places) {
+    var listEl = document.getElementById('placesList'), 
+        menuEl = document.getElementById('menu_wrap'),
+        fragment = document.createDocumentFragment(), 
+        bounds = new kakao.maps.LatLngBounds();
+
+    // 검색 결과 목록에 추가된 항목들을 제거합니다
+    removeAllChildNods(listEl);
+
+    // 지도에 표시되고 있는 마커를 제거합니다
+    removeMarker();
+    
+    // 검색 결과 1개만 표시
+    places = places.slice(0, 1);
+
+    for (var i = 0; i < places.length; i++) {
+        var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+            marker = addMarker(placePosition, i), 
+            itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+
+        bounds.extend(placePosition);
+
+        (function(marker, title) {
+            kakao.maps.event.addListener(marker, 'mouseover', function() {
+                displayInfowindow(marker, title);
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseout', function() {
+                infowindow.close();
+            });
+
+            itemEl.onmouseover = function () {
+                displayInfowindow(marker, title);
+            };
+
+            itemEl.onmouseout = function () {
+                infowindow.close();
+            };
+        })(marker, places[i].place_name);
+
+        fragment.appendChild(itemEl);
+    }
+
+    listEl.appendChild(fragment);
+    menuEl.scrollTop = 0;
+
+    // 지도 범위를 재설정합니다
+    map.setBounds(bounds);
+}
+
+// 지도 위에 표시되고 있는 마커를 모두 제거합니다
+function removeMarker() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }   
+    markers = [];
+}
+
+// 검색결과 항목을 Element로 반환하는 함수입니다
+function getListItem(index, places) {
+
+    var el = document.createElement('li'),
+    itemStr = '<span class="markerbg marker_1"></span>' +
+                '<div class="info">' +
+                '   <h5>' + places.place_name + '</h5>';
+
+    if (places.road_address_name) {
+        itemStr += '    <span>' + places.road_address_name + '</span>';
+    } else {
+        itemStr += '    <span>' +  places.address_name  + '</span>'; 
+    }
+
+    el.innerHTML = itemStr;
+    el.className = 'item';
+
+    return el;
+}
+
+// 검색결과 목록의 자식 Element를 제거하는 함수입니다
+function removeAllChildNods(el) {   
+    while (el.hasChildNodes()) {
+        el.removeChild(el.lastChild);
+    }
+}
+
+// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+function addMarker(position, idx, title) {
+    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+        imgOptions =  {
+            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        },
+        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+            marker = new kakao.maps.Marker({
+            position: position, // 마커의 위치
+            image: markerImage 
+        });
+
+    marker.setMap(map); // 지도 위에 마커를 표출합니다
+    markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+    return marker;
+}
+
+// markers 배열을 초기화합니다
+var markers = [];
+
+// 지도 위에 표시되고 있는 마커를 모두 제거합니다
+function removeMarker() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }   
+    markers = [];
+}
+
+
+// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+// 인포윈도우에 장소명을 표시합니다
+function displayInfowindow(marker, title) {
+    var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+    infowindow.setContent(content);
+    infowindow.open(map, marker);
+}
+
+        // 확대/축소 버튼 기능
+        var zoomInBtn = document.getElementById('zoomInBtn');
+        var zoomOutBtn = document.getElementById('zoomOutBtn');
+
+        // 확대 버튼 클릭 시 레벨을 1 감소시켜서 확대
+        zoomInBtn.addEventListener('click', function() {
+            map.setLevel(map.getLevel() - 1);
+        });
+
+        // 축소 버튼 클릭 시 레벨을 1 증가시켜서 축소
+        zoomOutBtn.addEventListener('click', function() {
+            map.setLevel(map.getLevel() + 1);
+        });
+
+        // 현위치 버튼 클릭 시 실행되는 함수
+        document.getElementById('currentLocationBtn').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                // 위치 정보를 가져올 수 있는지 확인
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude; // 위도
+                    var lon = position.coords.longitude; // 경도
+                    var locPosition = new kakao.maps.LatLng(lat, lon); // 현재 위치 좌표 생성
+
+                    // 지도의 중심을 현위치로 이동
+                    map.setCenter(locPosition);
+
+                    // 사용자 정의 마커 이미지 설정
+                    var imageSrc = 'images/here.png'; // 사용하고자 하는 마커 이미지의 URL
+                    var imageSize = new kakao.maps.Size(30, 30); // 이미지 크기 설정
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                    // 현위치 마커 생성
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: locPosition,
+                        image: markerImage // 커스텀 마커 이미지 적용
+                    });
+
+                }, function(error) {
+                    console.error("위치 정보를 가져올 수 없습니다.", error);
+                });
+            } else {
+                alert("브라우저에서 위치 정보 사용을 지원하지 않습니다.");
+            }
+        });
+
+
+        // 재난 아이콘 숨김/표시 
+        document.getElementById('showIconsBtn').addEventListener('mouseover', function() {
+            var iconContainer = document.getElementById('iconContainer');
+            iconContainer.style.display = 'flex'; // 아이콘 컨테이너 보이기
+        });
+
+        document.getElementById('showIconsBtn').addEventListener('mouseout', function() {
+            var iconContainer = document.getElementById('iconContainer');
+            iconContainer.style.display = 'none'; // 아이콘 컨테이너 숨기기
+        });
+
+        var showIconsBtn = document.getElementById('showIconsBtn');
+        var iconContainer = document.getElementById('iconContainer');
+
+        // 버튼에 마우스를 올렸을 때 아이콘을 표시
+        showIconsBtn.addEventListener('mouseenter', function() {
+            iconContainer.style.display = 'flex';
+        });
+
+        // 버튼에서 마우스가 벗어나도 아이콘이 유지되도록 설정
+        iconContainer.addEventListener('mouseenter', function() {
+            iconContainer.style.display = 'flex';
+        });
+
+        // 아이콘 컨테이너에서 마우스가 벗어나면 아이콘을 숨김
+        iconContainer.addEventListener('mouseleave', function() {
+            iconContainer.style.display = 'none';
+        });
+
+        // 버튼에서 마우스가 벗어나면 아이콘을 숨김
+        showIconsBtn.addEventListener('mouseleave', function() {
+            iconContainer.style.display = 'none';
+        });
+
+
+
+</script>
+</body>
+</html>

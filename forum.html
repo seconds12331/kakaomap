@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>게시판</title>
+    <link rel="stylesheet" href="layout.css">
+</head>
+
+<body>
+    <!-- 네비게이션 바 -->
+    <div class="navbar">
+      <a href="index.html" style="font-size:20px; font-weight: bold;">지도</a>
+      <a href="forum.html" style="font-size:20px; font-weight: bold;">게시판</a>
+      <a href="mforum.html" style="font-size:20px; font-weight: bold;">재난문자</a>
+      <a href="cforum.html" style="font-size:20px; font-weight: bold;">문의</a>
+    </div>
+  
+    <!-- 본문 내용 -->
+    <div class="content" id="content">
+        <div class="level1_titleWrap">
+            <h2 class="level1_title">게시판</h2>
+        </div>
+        <div id="content">
+            <div class="boardSearch_box">
+                    <div class="boardSearch_formCell">
+                        <label for="search_c_ocrc" class="sch_label">글 구분</label>
+                        <select id="search_c_ocrc" class="boardSearch_select" title="재난 유형 선택" onchange="c_orc_onchange()">
+                            <option value>구분</option>
+                            <option value="DST1">공지</option>
+                            <option value="DST2">자연재난</option>
+                            <option value="DST3">사고</option>
+                            <option value="DST4">정보</option>
+                            <option value="DST5">질문</option>
+                        </select>
+                    </div>
+                    <div class="boardSearch_formCell">
+                        <label for="search_type_v" class="sch_label">기본검색</label>
+                        <select id="search_type_v" class="boardSearch_select" title="검색 유형 선택">
+                            <option value="1">제목</option>
+                            <option value="2">내용</option>
+                            <option value="3">작성자</option>
+                        </select>
+                        <input type="text" class="search_input" onkeydown="search_val_v_onkeydown()" id="searchWrd" title="검색어입력">
+                    </div>
+                <a class="search_btn" onclick="fn_search()" tabindex="0">검색</a>
+            </div>
+        </div>
+    </div>
+    <div class="scroll-table">
+        <table class="borad-taable horizon">
+            <colgroup>
+                <col class="col-num">
+                <col class="col-div">
+                <col class="col-subject">
+                <col class="col-write">
+                <col class="col-date">
+                <col class="col-acess">
+                <col class="col-file">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="th-num">번호</th>
+                    <th class="th-div">구분</th>
+                    <th class="th-subject">제목</th>
+                    <th class="th-write">작성자</th>
+                    <th class="th-date">작성일</th>
+                    <th class="th-acess">조회수</th>
+                    <th class="th-file">첨부파일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="notice">
+                    <td class="td-num">1</th>
+                    <td class="td-div">공지</th>
+                    <td class="td-subject">시스템 업데이트 안내</th>
+                    <td class="td-write">홍길동</th>
+                    <td class="td-date">2024-12-05</th>
+                    <td class="td-acess">12</th>
+                    <td class="td-file">X</th>
+                </tr>
+                <tr class>
+                    <td class="td-num">2</th>
+                    <td class="td-div">자연재난</th>
+                    <td class="td-subject">7월 지진 발생</th>
+                    <td class="td-write">이순신</th>
+                    <td class="td-date">2024-12-22</th>
+                    <td class="td-acess">4</th>
+                    <td class="td-file">2</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="creat_btn" href="newwr.html">새글</a>
+
+    <script>
+
+    </script>
+</body>
+</html>

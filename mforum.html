@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>재난문자</title>
+    <link rel="stylesheet" href="layout.css">
+</head>
+
+<body>
+    <!-- 네비게이션 바 -->
+    <div class="navbar">
+      <a href="index.html" style="font-size:20px; font-weight: bold;">지도</a>
+      <a href="forum.html" style="font-size:20px; font-weight: bold;">게시판</a>
+      <a href="mforum.html" style="font-size:20px; font-weight: bold;">재난문자</a>
+      <a href="cforum.html" style="font-size:20px; font-weight: bold;">문의</a>
+    </div>
+  
+    <!-- 본문 내용 -->
+    <div class="content" id="content">
+        <div class="level1_titleWrap">
+            <h2 class="level1_title">재난문자</h2>
+        </div>
+        <div id="content">
+            <div class="boardSearch_box">
+                    <div class="boardSearch_formCell">
+                        <label for="search_c_ocrc" class="sch_label">재해구분</label>
+                        <select id="search_c_ocrc" class="boardSearch_select" title="재난 유형 선택" onchange="c_orc_onchange()">
+                            <option value>재난선택</option>
+                            <option value="DST1">지진</option>
+                            <option value="DST2">폭염</option>
+                            <option value="DST3">폭우</option>
+                            <option value="DST4">태풍</option>
+                            <option value="DST5">화재</option>
+                            <option value="DST6">실종</option>
+                            <option value="DST7">긴급재난</option>
+                        </select>
+                    </div>
+                    <div class="boardSearch_formCell">
+                        <label for="sbLawArea1" class="sch_label">대상지역</label>
+                        <select id="sbLawArea1" onchange="sbLawArea1_onchange()" class="boardSearch_select">
+                            <option value>시도 선택</option>
+                            <option value>전국</option>
+                            <option value="11">서울특별시</option>
+                            <option value="26">부산광역시</option>
+                            <option value="27">대구광역시</option>
+                            <option value="28">인천광역시</option>
+                            <option value="29">광주광역시</option>
+                            <option value="30">대전광역시</option>
+                            <option value="31">울산광역시</option>
+                            <option value="36">세종특별자치시</option>
+                            <option value="41">경기도</option>
+                            <option value="51">강원특별자치도</option>
+                            <option value="43">충청북도</option>
+                            <option value="44">충청남도</option>
+                            <option value="45">전북특별자치도</option>
+                            <option value="46">전라남도</option>
+                            <option value="47">경상북도</option>
+                            <option value="48">경상남도</option>
+                            <option value="50">제주특별자치도</option>
+                        </select>
+                        <!-- <select id="sbLawArea2" onchange="sbLawArea2_onchange()" class="boardSearch_select">
+                            <option value>시군구 선택</option>
+                        </select> -->
+                    </div>
+                    <div class="boardSearch_formCell">
+                        <label for="search_type_v" class="sch_label">기본검색</label>
+                        <select id="search_type_v" class="boardSearch_select" title="검색 유형 선택">
+                            <option value="1">제목</option>
+                            <option value="2">내용</option>
+                        </select>
+                        <input type="text" class="search_input" onkeydown="search_val_v_onkeydown()" id="searchWrd" title="검색어입력">
+                    </div>
+                    <div class="boardSearch_formCell" id="test">
+                        <label for="search_start" class="sch_label" style="display: block; flex-wrap: wrap;">등록일</label>
+                        <input type="text" class="calendar_input hasDateoicker" id="datepicker1" title="등록일검색시작일자">
+                        <span class="schTxt">-</span>
+                        <input type="text" class="calendar_input hasDateoicker" id="datepicker2" title="등록일검색종료일자">
+                    </div>
+                <a class="search_btn" onclick="fn_search()" tabindex="0">검색</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-table">
+        <table class="borad-taable horizon">
+            <colgroup>
+                <col class="col-num1">
+                <col class="col-dis">
+                <col class="col-reg">
+                <col class="col-sen">
+                <col class="col-mes">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="th-num">번호</th>
+                    <th class="th-dis">재해구분</th>
+                    <th class="th-reg">발생지역</th>
+                    <th class="th-sen">발송일</th>
+                    <th class="th-mes">재난문자</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="notice">
+                    <td class="td-num">1</th>
+                    <td class="td-dis">화재</th>
+                    <td class="td-reg">광명시, 시흥시</th>
+                    <td class="td-sen">2024-12-01</th>
+                    <td class="td-mes">오늘 13:30경 노온사동 567-10 창고 화재 발생. 주변차량은 우회하시고 유해물질 유입이 우려되오니 창문을 닫는 등 안전에 유의 바랍니다. </th>
+                </tr>
+                <tr class>
+                    <td class="td-num">2</th>
+                    <td class="td-dis">한파</th>
+                    <td class="td-reg">봉화군, 화천군</th>
+                    <td class="td-sen">2024-12-23</th>
+                    <td class="td-mes">한파주의보 발효 중. ▲야외활동 자제(방한용품 착용) ▲난방기 화재 주의 ▲도로결빙 주의 ▲수도계량기 동파방지 등 안전사고와 건강관리에 유의바랍니다.</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="creat_btn" href="newwr.html">새글</a>
+
+    <script>
+
+    </script>
+</body>
+</html>
